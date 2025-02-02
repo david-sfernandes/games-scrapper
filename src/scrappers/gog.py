@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from src.util.game_df import game_df
 
 
-def gog_scrapper(driver): 
+def gog_scrapper(driver):
   print("Extracting gog Games Library")
   games_df = game_df()
   lib_url = "https://www.gog.com/account"
@@ -21,15 +21,20 @@ def gog_scrapper(driver):
   games = soup_games.find_all("div", class_="product-row-wrapper")
 
   for game in games:
+    image = game.find(
+      "img", class_="product-row__img")["srcset"].split(" ,")[1].replace(" 2x", "")
+    image = "https:" + image
+
     new_row = pd.DataFrame(
         [
             {
                 "name": game.find("span", class_="product-title__text").text,
-                "image": game.find("img", class_="product-row__img")["srcset"].split(" ,")[1].replace(" 2x", ""),
+                "image": image,
                 "Link": "",
                 "origin": "gog",
             }
         ]
     )
     games_df = pd.concat([games_df, new_row], ignore_index=True)
+  print(len(games_df), "games found")
   return games_df

@@ -1,73 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/style.css" />
-    <title>GameMerge | Biblioteca de jogos definitiva</title>
-  </head>
-  <body>
-    <script type="module">
-      const cards = document.querySelectorAll(".card");
-      const buttons = document.querySelectorAll("button");
 
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          let origin = button.innerText.toLowerCase();
-          console.log("ORIGIN:", origin);
-          if (button.classList.contains("active")) {
-            button.classList.remove("active");
-            origin = "all";
-          } else {
-            buttons.forEach((button) => button.classList.remove("active"));
-            button.classList.add("active");
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="static/style.css" />
+  <title>GameMerge | Biblioteca de jogos definitiva</title>
+</head>
+
+<body>
+  <script type="module">
+    const cards = document.querySelectorAll(".card");
+    const buttons = document.querySelectorAll("button");
+    const search = document.querySelector("input[type='search']");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        let origin = button.innerText.toLowerCase();
+        if (button.classList.contains("active")) {
+          button.classList.remove("active");
+          origin = "all";
+          buttons[0].classList.add("active");
+        } else {
+          buttons.forEach((button) => button.classList.remove("active"));
+          button.classList.add("active");
+        }
+
+        cards.forEach((card) => {
+          card.style.display = "none";
+          if (card.dataset.origin === origin || origin === "all") {
+            card.style.display = "grid";
           }
-
-          cards.forEach((card) => {
-            card.style.display = "none";
-            if (card.dataset.origin === origin || origin === "all") {
-              card.style.display = "grid";
-            }
-          });
         });
       });
-    </script>
-    <header>
-      <h1>GameMerge</h1>
+    });
+
+    search.addEventListener("input", () => {
+      const value = search.value.toLowerCase();
+      cards.forEach((card) => {
+        const title = card.querySelector("h3").innerText.toLowerCase();
+        if (title.includes(value)) {
+          card.style.display = "grid";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  </script>
+  <header>
+    <h1>GameMerge</h1>
+    <section>
+      <div class="search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input type="search" placeholder="Buscar..." />
+      </div>
       <div>
+        <button class="active">All</button>
         <button>Steam</button>
         <button>GOG</button>
         <button>Epic</button>
       </div>
-    </header>
-    <div>
-      <p class="counter">Total de jogos: {{ count }}</p>
-    </div>
-    <main>
-      <section class="cards">
-        {% for game in games %}
-        <div
-          class="card"
-          style="--main-color: {{ colors[game.origin] }}"
-          data-origin="{{ game.origin }}"
-        >
-          <div class="card-image">
-            <img src="{{ game.image }}" alt="{{ game.name }}" />
-          </div>
-          <div class="card-info">
-            <h3>{{ game.name }}</h3>
-            <span class="origin-node">{{ game.origin.upper() }}</span>
-          </div>
+    </section>
+  </header>
+  <div>
+    <p class="counter">Total de jogos: {{ count }}</p>
+  </div>
+  <main>
+    <section class="cards">
+      {% for game in games %}
+      <div class="card" style="--main-color: {{ colors[game.origin] }}" data-origin="{{ game.origin }}">
+        <div class="card-image">
+          <img src="{{ game.image }}" alt="{{ game.name }}" />
         </div>
-        {% endfor %}
-      </section>
-    </main>
-    <footer>
-      <p>GameMerge &copy; 2025</p>
-      <p>
-        Feito por
-        <a href="https://github.com/david-sfernandes">David Fernandes</a>
-      </p>
-    </footer>
-  </body>
+        <div class="card-info">
+          <h3>{{ game.name }}</h3>
+          <span class="origin-node">{{ game.origin.upper() }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+  </main>
+  <footer>
+    <p>GameMerge &copy; 2025</p>
+    <p>
+      Feito por
+      <a href="https://github.com/david-sfernandes">David Fernandes</a>
+    </p>
+  </footer>
+</body>
+
 </html>

@@ -15,6 +15,7 @@ def steam_scrapper(driver):
   WebDriverWait(driver, 5).until(
       lambda d: d.find_element(By.CSS_SELECTOR, "._3tY9vKLCmyG2H2Q4rUJpkr ._2-pQFn1G7dZ7667rrakcU3 picture")
   )
+  driver.execute_script("window.scrollTo({ left:0, top: document.body.scrollHeight/2, behavior: 'smooth' });")
   driver.execute_script("window.scrollTo({ left:0, top: document.body.scrollHeight, behavior: 'smooth' });")
   time.sleep(5)
   list = driver.find_element(By.CLASS_NAME, "_3tY9vKLCmyG2H2Q4rUJpkr")

@@ -14,7 +14,6 @@ def epic_scrapper(driver):
   driver.get(lib_url)
   time.sleep(5)
 
-  driver.save_screenshot("epic.png")
   WebDriverWait(driver, 5).until(
       lambda d: d.find_element(
         By.CSS_SELECTOR, ".am-dlv5a8")
